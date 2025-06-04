@@ -53,21 +53,37 @@ const average = (arr) =>
 export default function App() {
   
   const [movies, setMovies] = useState(tempMovieData);
+   const [watched, setWatched] = useState(tempWatchedData);
   return (
     <>
-    <Navbar movies={movies}/>
-     <Main movies={movies} />   
+    <Navbar > 
+      
+       <Search/>
+       <NumResults movies={movies}/>
+       </Navbar>
+     <Main >
+      <Box  >
+        <MovieList movies={movies} />
+      </Box>
+      <Box  >
+        <>
+             <WatchedSummary watched={watched} />
+              <WatchedList watched={watched} />
+             
+            </>
+      </Box>
+       </Main>   
+      
     </>
   );
 }
 
-function Navbar({movies}){
+function Navbar({children}){
   
   return(
    <nav className="nav-bar">
-        <Logo/>
-       <Search/>
-       <NumResults movies={movies}/>
+    <Logo/>
+       {children}
       </nav>
   )
 }
@@ -100,30 +116,30 @@ function Search(){
    )
 }
 
-function Main({movies}){
+function Main({children}){
  
  
   return (
          <main className="main">
-       <ListBox movies={movies} />
-       <WatchedBox/>
+       
+       {children}
       </main>
   )
 }
 
-function ListBox({movies}){
+function Box({children}){
  
-  const [isOpen1, setIsOpen1] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
   return (
      <div className="box">
           <button
             className="btn-toggle"
-            onClick={() => setIsOpen1((open) => !open)}
+            onClick={() => setIsOpen((open) => !open)}
           >
-            {isOpen1 ? "–" : "+"}
+            {isOpen? "–" : "+"}
           </button>
-          {isOpen1 && (
-           <MovieList movies={movies} />
+          {isOpen && (
+          children
           )}
         </div>
 
@@ -155,7 +171,7 @@ function Movie({movie}){
                 </li>
     )
 }
-
+/*
 function WatchedBox(){
      const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen2, setIsOpen2] = useState(true);
@@ -178,7 +194,7 @@ function WatchedBox(){
         </div>
     )
 }
-
+*/
 function WatchedSummary({watched}){
   
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
